@@ -1,0 +1,43 @@
+{
+    "name": "crop-server",
+    "version": "1.0.0",
+    "description": "Backend for Crop Recommendation System",
+    "main": "src/server.js",
+    "type": "module",
+    "scripts": {
+        "start": "node src/server.js",
+        "dev": "node --watch src/server.js",
+        "test": "npm run test:unit",
+        "test:unit": "node test_farm_unit.js && node test_farm_location_unit.js && node test_disease_info_unit.js && node test_soilgrids_unit.js && node test_env_validation.js && node test_auth_profile_unit.js && node test_market_normalization_unit.js && node test_rate_limiter_unit.js && node test_error_sanitization.js && node test_proxy_trust.js && node test_shutdown.js",
+        "test:all": "npm run test:unit && npm run test:integration",
+        "test:integration": "node test_backend_integration.js",
+        "test:e2e": "node test_final_e2e_verification.js",
+        "test:farm": "node test_farm_unit.js",
+        "test:farm:location": "node test_farm_location_unit.js",
+        "test:farm:integration": "node test_farm_integration.js",
+        "test:soil": "node test_soilgrids_unit.js",
+        "test:disease": "node test_disease_info_unit.js",
+        "test:env": "node test_env_validation.js",
+        "test:auth": "node test_auth_profile_unit.js",
+        "test:market": "node test_market_normalization_unit.js",
+        "test:rate-limit": "node test_rate_limiter_unit.js",
+        "test:error": "node test_error_sanitization.js",
+        "test:proxy": "node test_proxy_trust.js",
+        "test:shutdown": "node test_shutdown.js",
+        "seed:disease": "node seedDiseaseInfos.js"
+    },
+    "dependencies": {
+        "axios": "^1.20.0",
+        "bcryptjs": "^3.0.3",
+        "cors": "^2.8.5",
+        "dotenv": "^16.3.1",
+        "express": "^4.18.2",
+        "form-data": "^4.0.6",
+        "jsonwebtoken": "^9.0.3",
+        "mongoose": "^7.8.12",
+        "multer": "^2.0.2"
+    },
+    "devDependencies": {
+        "supertest": "^7.2.2"
+    }
+}

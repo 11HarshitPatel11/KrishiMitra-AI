@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" fill="none">
+  <rect width="120" height="120" rx="20" fill="#f0fdf4" stroke="#dcfce7" stroke-width="2"/>
+  <circle cx="60" cy="60" r="38" fill="#dcfce7"/>
+  <!-- AI Sparkle Ring -->
+  <path d="M60 26V32M60 88V94M26 60H32M88 60H94" stroke="#16a34a" stroke-width="2.5" stroke-linecap="round"/>
+  <!-- Sprout Stem -->
+  <path d="M60 82V50" stroke="#15803d" stroke-width="3.5" stroke-linecap="round"/>
+  <!-- Two Vibrant Leaves -->
+  <path d="M60 62C46 62 40 50 42 44C48 44 60 52 60 62Z" fill="#22c55e" stroke="#15803d" stroke-width="1.5"/>
+  <path d="M60 54C74 54 80 42 78 36C72 36 60 44 60 54Z" fill="#4ade80" stroke="#15803d" stroke-width="1.5"/>
+  <!-- Soil Arc -->
+  <path d="M42 82C48 85 72 85 78 82" stroke="#854d0e" stroke-width="3" stroke-linecap="round"/>
+</svg>

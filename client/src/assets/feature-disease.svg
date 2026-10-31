@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" fill="none">
+  <rect width="120" height="120" rx="20" fill="#f0fdfa" stroke="#ccfbf1" stroke-width="2"/>
+  <circle cx="60" cy="60" r="38" fill="#ccfbf1"/>
+  <!-- Leaf -->
+  <path d="M40 78C40 54 54 36 78 34C78 58 64 78 40 78Z" fill="#14b8a6" stroke="#0f766e" stroke-width="2"/>
+  <path d="M40 78C52 68 64 56 78 34" stroke="#99f6e4" stroke-width="2"/>
+  <!-- Scanner / Diagnostic Reticle -->
+  <circle cx="68" cy="52" r="14" stroke="#0284c7" stroke-width="2" stroke-dasharray="3 3"/>
+  <path d="M68 44V48M68 56V60M60 52H64M72 52H76" stroke="#0284c7" stroke-width="2" stroke-linecap="round"/>
+  <!-- Lens Handle -->
+  <path d="M78 62L88 72" stroke="#0284c7" stroke-width="3.5" stroke-linecap="round"/>
+</svg>

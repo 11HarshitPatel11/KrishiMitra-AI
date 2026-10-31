@@ -1,0 +1,69 @@
+Cross-Validation Validation Report - Random Forest Baseline
+Generated at: 2026-09-30T20:35:18.710789
+
+--- Model Configuration ---
+Algorithm: RandomForestClassifier
+Parameters: n_estimators=100, random_state=42
+
+--- CV Strategy ---
+Strategy: StratifiedKFold
+Splits: 5
+Untouched Final Test Set Remaining: 440 samples
+Cross-Validation Target Data: 1760 Training Samples
+
+========================================
+Accuracy
+========================================
+Fold 1 = 1.0
+Fold 2 = 0.9971590909090909
+Fold 3 = 0.9829545454545454
+Fold 4 = 0.9914772727272727
+Fold 5 = 0.9971590909090909
+Mean = 0.99375
+Std  = 0.006066521734108723
+
+========================================
+Macro Precision
+========================================
+Fold 1 = 1.0
+Fold 2 = 0.9973262032085561
+Fold 3 = 0.9858585858585859
+Fold 4 = 0.9922756981580512
+Fold 5 = 0.9973262032085561
+Mean = 0.9945573380867498
+Std  = 0.005016571895601105
+
+========================================
+Macro Recall
+========================================
+Fold 1 = 1.0
+Fold 2 = 0.9971590909090909
+Fold 3 = 0.9829545454545454
+Fold 4 = 0.9914772727272727
+Fold 5 = 0.9971590909090909
+Mean = 0.99375
+Std  = 0.006066521734108723
+
+========================================
+Macro F1
+========================================
+Fold 1 = 1.0
+Fold 2 = 0.9971563138718564
+Fold 3 = 0.9827518886342417
+Fold 4 = 0.9914522140501095
+Fold 5 = 0.9971563138718564
+Mean = 0.9937033460856128
+Std  = 0.006139964809894294
+
+========================================
+Comparison with Step 8
+========================================
+Step 8 Test Accuracy: 0.9954545454545455
+Step 9 Mean CV Accuracy: 0.99375
+
+Step 8 Test Macro F1: 0.9954517027687758
+Step 9 Mean CV Macro F1: 0.9937033460856128
+
+Interpretation:
+The cross-validation mean is structurally equivalent to the held-out test constraints. The extremely low standard deviation indicates highly consistent fold-by-fold validation performance on this dataset.
+Note carefully: The model demonstrates consistent validation performance strictly on this synthetic tabular distribution. Further external validation with representative physical agricultural deployments would be definitively required to thoroughly assess real-world generalization bounds.

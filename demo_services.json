@@ -1,0 +1,36 @@
+{
+  "startedAt": "2026-10-25T10:55:00.000Z",
+  "mongo": {
+    "status": "active",
+    "port": 27017,
+    "url": "mongodb://localhost:27017/crop_db",
+    "managedExternally": true
+  },
+  "ml": {
+    "name": "FastAPI ML Service",
+    "pid": 4640,
+    "port": 8000,
+    "url": "http://127.0.0.1:8000",
+    "healthUrl": "http://127.0.0.1:8000/health",
+    "readyUrl": "http://127.0.0.1:8000/ready"
+  },
+  "server": {
+    "name": "Express API Backend",
+    "taskId": "task-1447",
+    "port": 5000,
+    "url": "http://localhost:5000",
+    "healthUrl": "http://localhost:5000/api/v1/health",
+    "rateLimiting": {
+      "mode": "development",
+      "maxRequests": 100,
+      "windowMs": 900000,
+      "routePartitioned": true
+    }
+  },
+  "client": {
+    "name": "React / Vite Frontend",
+    "pid": 18860,
+    "port": 3000,
+    "url": "http://localhost:3000"
+  }
+}

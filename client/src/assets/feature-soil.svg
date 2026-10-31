@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" fill="none">
+  <rect width="120" height="120" rx="20" fill="#fdfbf7" stroke="#ede1ca" stroke-width="2"/>
+  <circle cx="60" cy="60" r="38" fill="#f7f2e7"/>
+  <!-- Soil Strata Jar / Flask -->
+  <path d="M52 36H68V48L78 72C80 77 76 84 70 84H50C44 84 40 77 42 72L52 48V36Z" fill="#ede1ca" stroke="#7c5a34" stroke-width="2.5" stroke-linejoin="round"/>
+  <!-- Soil layers -->
+  <path d="M45 74C52 72 68 76 75 74L77 78C76 82 72 84 68 84H52C48 84 44 82 43 78L45 74Z" fill="#7c5a34"/>
+  <path d="M48 64C56 62 64 66 72 64L75 74C68 76 52 72 45 74L48 64Z" fill="#b89456"/>
+  <!-- Chemistry Bubbles (NPK) -->
+  <circle cx="56" cy="54" r="3" fill="#22c55e"/>
+  <circle cx="64" cy="58" r="2.5" fill="#3b82f6"/>
+  <circle cx="60" cy="46" r="2" fill="#eab308"/>
+</svg>

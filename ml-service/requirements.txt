@@ -1,0 +1,27 @@
+--extra-index-url https://download.pytorch.org/whl/cpu
+
+# ==============================================================================
+# KrishiMitra AI — ML Service Production Dependencies
+# ==============================================================================
+# Pinned to exact verified versions tested in disease-venv (Step 24.24 / BLK-04)
+# to guarantee reproducible container builds and prevent breaking upstream updates.
+# Development tooling (e.g. jupyter) is maintained in requirements-dev.txt.
+# ==============================================================================
+
+# Core API & Microservice Framework
+fastapi==0.142.4
+uvicorn==0.54.0
+pydantic==2.13.5
+python-multipart==0.0.32
+
+# Data Processing & Classical ML (Crop Recommendation Random Forest)
+pandas==3.0.6
+numpy==2.4.6
+scikit-learn==1.9.1
+joblib==1.6.0
+
+# Deep Learning & Computer Vision (PlantVillage Disease MobileNetV3)
+# Explicit CPU-only wheels pinned to official PyTorch CPU wheel repository
+torch==2.14.1+cpu
+torchvision==0.29.1+cpu
+pillow==12.3.0

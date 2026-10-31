@@ -1,0 +1,88 @@
+# ==============================================================================
+# KrishiMitra AI — Production Nginx Static Hosting & Reverse Proxy Configuration
+# ==============================================================================
+# This configuration template demonstrates how to host the production-built
+# Vite/React frontend while supporting:
+#   1. React Router v7 HTML5 History API deep-links (/farms, /disease, etc.)
+#   2. Correct 404 handling for nonexistent static assets (/assets/*)
+#   3. Clean reverse proxying of API requests to the Node.js Express backend
+# ==============================================================================
+
+server {
+    listen 80;
+    server_name krishimitra.example.com;
+
+    # Path to Vite production build output ('client/dist')
+    root /var/www/krishimitra/client/dist;
+    index index.html;
+
+    # Maximum client upload body size (Step 24.24 / BLK-01)
+    # Aligned with Express Multer ceiling (5MB) and React frontend file picker limits
+    # for leaf image disease detection. Default Nginx limit (1MB) rejects images >1MB with HTTP 413.
+    client_max_body_size 5M;
+
+    # Basic security headers
+    add_header X-Content-Type-Options "nosniff" always;
+    add_header X-Frame-Options "SAMEORIGIN" always;
+    add_header Referrer-Policy "strict-origin-when-cross-origin" always;
+
+    # --------------------------------------------------------------------------
+    # 1. Hashed Static Assets (Vite Output)
+    # --------------------------------------------------------------------------
+    # Vite bundles assets under /assets/ with unique content hashes (e.g., index-5e8cad17.js).
+    # These can be cached immutably. If an asset is missing, return an explicit 404
+    # rather than falling back to index.html (which would break script execution).
+    # --------------------------------------------------------------------------
+    location /assets/ {
+        try_files $uri =404;
+        expires 1y;
+        add_header Cache-Control "public, immutable";
+    }
+
+    # --------------------------------------------------------------------------
+    # 2. Application Route Fallback (React Router Single-Page Application)
+    # --------------------------------------------------------------------------
+    # Checks if the exact file or directory exists. If not, rewrites to index.html
+    # so that React Router can handle client-side routing for /recommendation,
+    # /farms, /history, /market, /soil, /disease, /login, /register, etc.
+    # --------------------------------------------------------------------------
+    location / {
+        try_files $uri $uri/ /index.html;
+    }
+
+    # --------------------------------------------------------------------------
+    # 3. Backend API Gateway Reverse Proxy
+    # --------------------------------------------------------------------------
+    # Proxies all API requests to the Node.js / Express backend service.
+    # Crucially, API requests are NOT rewritten to index.html.
+    # --------------------------------------------------------------------------
+    location /api/ {
+        proxy_pass http://localhost:5000;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_cache_bypass $http_upgrade;
+
+        # Standard proxy timeouts for external third-party data aggregation
+        proxy_connect_timeout 60s;
+        proxy_send_timeout 60s;
+        proxy_read_timeout 60s;
+    }
+
+    # --------------------------------------------------------------------------
+    # 4. Standard Web File Handlers
+    # --------------------------------------------------------------------------
+    location = /favicon.ico {
+        access_log off;
+        log_not_found off;
+    }
+
+    location = /robots.txt {
+        access_log off;
+        log_not_found off;
+    }
+}

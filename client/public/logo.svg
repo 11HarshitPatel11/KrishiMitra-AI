@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none">
+  <defs>
+    <linearGradient id="leafGrad" x1="8" y1="8" x2="40" y2="40" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#22c55e" />
+      <stop offset="100%" stop-color="#15803d" />
+    </linearGradient>
+    <linearGradient id="wheatGrad" x1="16" y1="4" x2="36" y2="44" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#fbbf24" />
+      <stop offset="100%" stop-color="#d97706" />
+    </linearGradient>
+  </defs>
+  <!-- Background Badge -->
+  <rect x="2" y="2" width="44" height="44" rx="12" fill="#f0fdf4" stroke="#bbf7d0" stroke-width="1.5" />
+  
+  <!-- Left Sprout Leaf -->
+  <path d="M12 28C12 18 20 12 28 12C28 20 22 28 12 28Z" fill="url(#leafGrad)" />
+  <path d="M12 28C18 24 24 20 28 12" stroke="#86efac" stroke-width="1.5" stroke-linecap="round" />
+  
+  <!-- Right Wheat Stalk & Grains -->
+  <path d="M24 38V16" stroke="url(#wheatGrad)" stroke-width="2.5" stroke-linecap="round" />
+  <circle cx="21" cy="20" r="2.5" fill="url(#wheatGrad)" />
+  <circle cx="27" cy="18" r="2.5" fill="url(#wheatGrad)" />
+  <circle cx="21" cy="26" r="2.5" fill="url(#wheatGrad)" />
+  <circle cx="27" cy="24" r="2.5" fill="url(#wheatGrad)" />
+  <circle cx="24" cy="13" r="2.5" fill="url(#wheatGrad)" />
+
+  <!-- Soil Foundation Line -->
+  <path d="M10 40H38" stroke="#15803d" stroke-width="2" stroke-linecap="round" />
+</svg>

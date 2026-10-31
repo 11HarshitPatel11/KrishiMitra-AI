@@ -1,0 +1,71 @@
+# ==============================================================================
+# KrishiMitra AI — Root Git Ignore Configuration
+# ==============================================================================
+
+# Dependencies & Build Outputs
+node_modules/
+**/node_modules/
+dist/
+**/dist/
+build/
+**/build/
+
+# Environment Variables & Secrets (Never commit secrets to version control)
+.env
+.env.*
+**/.env
+**/.env.*
+!.env.example
+!**/.env.example
+
+# Python Virtual Environments & Caches
+__pycache__/
+**/__pycache__/
+*.pyc
+*.pyo
+*.pyd
+venv/
+**/venv/
+env/
+**/env/
+.venv/
+**/.venv/
+disease-venv/
+**/disease-venv/
+.pytest_cache/
+**/.ipynb_checkpoints/
+
+# Raw ML Datasets (54,000+ training images ~855 MB; trained models are in artifacts/)
+ml-service/datasets/PlantVillage/
+ml-service/datasets/disease/
+
+# Logs, Dumps & Transient Test Files
+*.log
+**/*.log
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+test_*.txt
+*_out.txt
+**/*_out.txt
+dataset_test_out.txt
+pip_out.txt
+report.txt
+
+# Backup & Scratch Files
+*.bak
+**/*.bak
+coverage/
+**/coverage/
+scratch/
+**/scratch/
+
+# IDE, OS & Tooling Artifacts
+.DS_Store
+Thumbs.db
+.vscode/
+**/.vscode/
+.idea/
+**/.idea/
+.gemini/
+**/.gemini/

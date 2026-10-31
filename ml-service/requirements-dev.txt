@@ -1,0 +1,13 @@
+# ==============================================================================
+# KrishiMitra AI — ML Service Development Dependencies
+# ==============================================================================
+# Development, exploratory analysis, and offline notebook training tooling.
+# Install alongside production requirements: pip install -r requirements.txt -r requirements-dev.txt
+# ==============================================================================
+
+-r requirements.txt
+
+# Interactive Notebooks & Visualization
+jupyter
+matplotlib
+tqdm

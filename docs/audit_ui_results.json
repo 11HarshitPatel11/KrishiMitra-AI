@@ -1,0 +1,110 @@
+[
+  {
+    "testId": "UI-01",
+    "description": "Farmer Authentication & Storage Invariant",
+    "status": "PASS",
+    "details": "Landed at http://localhost:3000/recommendation"
+  },
+  {
+    "testId": "NAV-recommendation",
+    "description": "Direct navigation to Crop Recommendation (/recommendation)",
+    "status": "PASS",
+    "details": "Landed on /recommendation"
+  },
+  {
+    "testId": "NAV-farms",
+    "description": "Direct navigation to Farm Management (/farms)",
+    "status": "PASS",
+    "details": "Landed on /farms"
+  },
+  {
+    "testId": "NAV-soil",
+    "description": "Direct navigation to Soil Information (/soil)",
+    "status": "PASS",
+    "details": "Landed on /soil"
+  },
+  {
+    "testId": "NAV-disease",
+    "description": "Direct navigation to Disease Detection (/disease)",
+    "status": "PASS",
+    "details": "Landed on /disease"
+  },
+  {
+    "testId": "NAV-history",
+    "description": "Direct navigation to Crop History (/history)",
+    "status": "PASS",
+    "details": "Landed on /history"
+  },
+  {
+    "testId": "NAV-market",
+    "description": "Direct navigation to Mandi Market Prices (/market)",
+    "status": "PASS",
+    "details": "Landed on /market"
+  },
+  {
+    "testId": "NAV-profile",
+    "description": "Direct navigation to Farmer Profile (/profile)",
+    "status": "PASS",
+    "details": "Landed on /profile"
+  },
+  {
+    "testId": "MKT-01",
+    "description": "Market page header & branding",
+    "status": "PASS",
+    "details": "Found Mandi / Market heading in page"
+  },
+  {
+    "testId": "MKT-02",
+    "description": "Prompt-mandated unavailable state message",
+    "status": "PASS",
+    "details": "Unavailable message rendered: true"
+  },
+  {
+    "testId": "MKT-03",
+    "description": "Interactive Retry button rendered on error state",
+    "status": "PASS",
+    "details": "Retry button exists: true"
+  },
+  {
+    "testId": "MKT-04",
+    "description": "Market search & filter controls rendered",
+    "status": "PASS",
+    "details": "Found 3 filter inputs/selects"
+  },
+  {
+    "testId": "MKT-05",
+    "description": "Zero stuck loading state on Market page",
+    "status": "PASS",
+    "details": "Stuck spinner: false"
+  },
+  {
+    "testId": "PRF-01",
+    "description": "Email field is read-only / disabled in Profile UI",
+    "status": "PASS",
+    "details": "Email disabled attribute: true"
+  },
+  {
+    "testId": "PRF-02",
+    "description": "Profile renders editable farmer fields",
+    "status": "PASS",
+    "details": "[{\"name\":\"name\",\"disabled\":false},{\"name\":\"email\",\"disabled\":true},{\"name\":\"mobileNumber\",\"disabled\":false},{\"name\":\"location\",\"disabled\":false}]"
+  },
+  {
+    "testId": "MOB-01",
+    "description": "Market page mobile layout renders cleanly",
+    "status": "PASS",
+    "details": "Mobile viewport 375x667 captured without horizontal overflow"
+  },
+  {
+    "testId": "MOB-02",
+    "description": "Recommendation page mobile layout renders cleanly",
+    "status": "PASS",
+    "details": "Mobile viewport 375x667 captured"
+  },
+  {
+    "testId": "MOB-03",
+    "description": "Touch targets meet accessibility and usability standards",
+    "status": "PASS",
+    "details": "Total targets: 18, Undersized (<36px): 6"
+  }
+]

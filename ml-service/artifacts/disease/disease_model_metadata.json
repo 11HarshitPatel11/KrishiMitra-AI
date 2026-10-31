@@ -1,0 +1,48 @@
+{
+    "best_epoch": 3,
+    "best_val_accuracy": 0.9010552072182291,
+    "best_val_loss": 0.3053115675515548,
+    "test_accuracy": 0.900924456064992,
+    "macro_precision": 0.8874481490104555,
+    "macro_recall": 0.8759068524822448,
+    "macro_f1": 0.8764615583222684,
+    "weighted_f1": 0.8996773756691544,
+    "top1_accuracy": 0.900924456064992,
+    "top3_accuracy": 0.9783359790830143,
+    "avg_confidence_correct": 0.9205228799666784,
+    "avg_confidence_incorrect": 0.591478007930725,
+    "thresholds": {
+        "0.5": {
+            "coverage": 0.9394901484732469,
+            "accuracy": 0.9333068283470828
+        },
+        "0.6": {
+            "coverage": 0.890372583808012,
+            "accuracy": 0.9506030414263241
+        },
+        "0.7": {
+            "coverage": 0.8436828835558876,
+            "accuracy": 0.9650249031543996
+        },
+        "0.8": {
+            "coverage": 0.7907367634699786,
+            "accuracy": 0.9772083136513935
+        },
+        "0.9": {
+            "coverage": 0.7068820618171632,
+            "accuracy": 0.9857331571994716
+        }
+    },
+    "model_size_mb": 6.067723274230957,
+    "cpu_inference_time_ms": 22.37018585205078,
+    "train_params": {
+        "model": "mobilenet_v3_small",
+        "batch_size": 64,
+        "optimizer": "Adam",
+        "learning_rate": 0.001,
+        "validation_split": "From Folder structure",
+        "epochs": 3,
+        "frozen_layers": "features",
+        "unfrozen_layers": "classifier"
+    }
+}

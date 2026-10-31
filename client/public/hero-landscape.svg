@@ -1,0 +1,86 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 520" fill="none">
+  <defs>
+    <linearGradient id="skyGrad" x1="450" y1="0" x2="450" y2="300" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#ecfdf5" />
+      <stop offset="60%" stop-color="#fef3c7" />
+      <stop offset="100%" stop-color="#fffbeb" />
+    </linearGradient>
+    <linearGradient id="sunGrad" x1="680" y1="80" x2="680" y2="200" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#fbbf24" stop-opacity="0.9" />
+      <stop offset="100%" stop-color="#f59e0b" stop-opacity="0.2" />
+    </linearGradient>
+    <linearGradient id="hillBack" x1="0" y1="200" x2="900" y2="350" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#86efac" />
+      <stop offset="100%" stop-color="#4ade80" />
+    </linearGradient>
+    <linearGradient id="hillMid" x1="0" y1="260" x2="900" y2="420" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#22c55e" />
+      <stop offset="100%" stop-color="#16a34a" />
+    </linearGradient>
+    <linearGradient id="hillFront" x1="0" y1="340" x2="900" y2="520" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#15803d" />
+      <stop offset="100%" stop-color="#166534" />
+    </linearGradient>
+    <linearGradient id="soilPatch" x1="200" y1="420" x2="700" y2="520" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#78350f" stop-opacity="0.2" />
+      <stop offset="100%" stop-color="#78350f" stop-opacity="0.4" />
+    </linearGradient>
+  </defs>
+
+  <!-- Sky & Atmosphere -->
+  <rect width="900" height="520" rx="24" fill="url(#skyGrad)" />
+
+  <!-- Morning Sun -->
+  <circle cx="680" cy="150" r="90" fill="url(#sunGrad)" />
+  <circle cx="680" cy="150" r="50" fill="#fef08a" opacity="0.8" />
+
+  <!-- Distant Mountain Ridge -->
+  <path d="M0 240Q160 170 320 230T640 210Q780 180 900 220V520H0Z" fill="#a7f3d0" opacity="0.6" />
+
+  <!-- Midground Rolling Terraces -->
+  <path d="M0 290Q200 230 450 280T900 260V520H0Z" fill="url(#hillBack)" />
+
+  <!-- Crop Rows Pattern 1 -->
+  <path d="M50 330Q250 290 500 330T880 320" stroke="#bbf7d0" stroke-width="2" stroke-dasharray="8 6" />
+  <path d="M20 360Q260 320 520 360T890 350" stroke="#bbf7d0" stroke-width="2" stroke-dasharray="10 8" />
+
+  <!-- Foreground Lush Green Farm Hill -->
+  <path d="M0 350Q280 290 550 360T900 330V520H0Z" fill="url(#hillMid)" />
+
+  <!-- Terraced Furrows -->
+  <path d="M-20 400C220 350 480 410 920 370" stroke="#15803d" stroke-width="3" opacity="0.6" />
+  <path d="M-20 440C260 390 540 450 920 410" stroke="#14532d" stroke-width="4" opacity="0.5" />
+  
+  <!-- Foreground Organic Rich Soil Bed -->
+  <path d="M0 430Q300 380 600 440T900 410V520H0Z" fill="url(#hillFront)" />
+
+  <!-- Subtle Smart Sensor / AI Wave Overlay -->
+  <g opacity="0.4">
+    <circle cx="280" cy="380" r="4" fill="#ffffff" />
+    <circle cx="280" cy="380" r="14" stroke="#ffffff" stroke-width="1.5" stroke-dasharray="3 3" />
+    <path d="M280 380L420 330" stroke="#ffffff" stroke-width="1.5" stroke-dasharray="4 4" />
+    
+    <circle cx="420" cy="330" r="4" fill="#ffffff" />
+    <circle cx="420" cy="330" r="14" stroke="#ffffff" stroke-width="1.5" stroke-dasharray="3 3" />
+    <path d="M420 330L600 370" stroke="#ffffff" stroke-width="1.5" stroke-dasharray="4 4" />
+    
+    <circle cx="600" cy="370" r="4" fill="#ffffff" />
+    <circle cx="600" cy="370" r="14" stroke="#ffffff" stroke-width="1.5" stroke-dasharray="3 3" />
+  </g>
+
+  <!-- Healthy Crop Plants in Foreground -->
+  <g fill="#4ade80" stroke="#14532d" stroke-width="1.5">
+    <!-- Plant 1 -->
+    <path d="M120 480Q110 440 85 435Q115 450 120 480Z" />
+    <path d="M120 480Q130 435 155 430Q125 450 120 480Z" />
+    <path d="M120 480V420" stroke="#86efac" stroke-width="2" />
+    <!-- Plant 2 -->
+    <path d="M220 490Q205 450 180 445Q210 460 220 490Z" />
+    <path d="M220 490Q235 445 260 440Q230 460 220 490Z" />
+    <path d="M220 490V430" stroke="#86efac" stroke-width="2" />
+    <!-- Plant 3 -->
+    <path d="M780 485Q765 445 740 440Q770 455 780 485Z" />
+    <path d="M780 485Q795 440 820 435Q790 455 780 485Z" />
+    <path d="M780 485V425" stroke="#86efac" stroke-width="2" />
+  </g>
+</svg>

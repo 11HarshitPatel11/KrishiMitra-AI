@@ -1,0 +1,33 @@
+{
+  "name": "crop-client",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "test": "npm run test:unit",
+    "test:unit": "node test_i18n_unit.mjs && node test_api_config.mjs && node test_rainfall_guidance.mjs && node test_navigation.mjs && node test_router.mjs && node test_profile_and_remediation.mjs && node test_farm_location_client.mjs",
+    "test:i18n": "node test_i18n_unit.mjs",
+    "test:api": "node test_api_config.mjs",
+    "test:rainfall": "node test_rainfall_guidance.mjs",
+    "test:nav": "node test_navigation.mjs",
+    "test:router": "node test_router.mjs",
+    "test:profile": "node test_profile_and_remediation.mjs",
+    "test:farm:location": "node test_farm_location_client.mjs"
+  },
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^7.18.4"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.0.3",
+    "autoprefixer": "^10.4.14",
+    "postcss": "^8.4.27",
+    "puppeteer": "^25.12.0",
+    "tailwindcss": "^3.3.3",
+    "vite": "^4.4.5"
+  }
+}

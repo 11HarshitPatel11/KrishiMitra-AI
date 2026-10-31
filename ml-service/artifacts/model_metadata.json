@@ -1,0 +1,46 @@
+{
+    "model_type": "RandomForestClassifier",
+    "n_estimators": 100,
+    "random_state": 42,
+    "feature_order": [
+        "nitrogen",
+        "phosphorus",
+        "potassium",
+        "temperature",
+        "humidity",
+        "pH",
+        "rainfall"
+    ],
+    "number_of_classes": 22,
+    "class_mapping": {
+        "0": "apple",
+        "1": "banana",
+        "2": "blackgram",
+        "3": "chickpea",
+        "4": "coconut",
+        "5": "coffee",
+        "6": "cotton",
+        "7": "grapes",
+        "8": "jute",
+        "9": "kidneybeans",
+        "10": "lentil",
+        "11": "maize",
+        "12": "mango",
+        "13": "mothbeans",
+        "14": "mungbean",
+        "15": "muskmelon",
+        "16": "orange",
+        "17": "papaya",
+        "18": "pigeonpeas",
+        "19": "pomegranate",
+        "20": "rice",
+        "21": "watermelon"
+    },
+    "training_date": "2026-09-30T19:41:22.046451",
+    "dataset_filename": "Crop_recommendation.csv",
+    "metrics": {
+        "training_accuracy": 1.0,
+        "test_accuracy": 0.9954545454545455,
+        "test_macro_f1": 0.9954517027687758
+    }
+}

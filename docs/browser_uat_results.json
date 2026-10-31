@@ -1,0 +1,91 @@
+{
+  "step": "Step 24.22 Interactive Browser End-to-End User Acceptance Testing (UAT)",
+  "timestamp": "2026-10-24T20:15:00.927Z",
+  "browserVersion": "Chrome/154.0.8037.57",
+  "workflows": {
+    "navigation": {
+      "id": "UAT-NAV-01",
+      "status": "PASS",
+      "details": {
+        "redirectedToLogin": true,
+        "headerTitle": "KrishiMitra AI",
+        "is404Working": true
+      }
+    },
+    "authentication": {
+      "id": "UAT-AUTH-01",
+      "status": "PASS",
+      "details": {
+        "hasToken": true,
+        "invalidLoginMessage": "Invalid credentials"
+      }
+    },
+    "farmManagement": {
+      "id": "UAT-FARM-01",
+      "status": "PASS",
+      "details": {
+        "farmCreated": true,
+        "farmUpdated": true
+      }
+    },
+    "recommendation": {
+      "id": "UAT-REC-01",
+      "status": "PASS",
+      "details": {
+        "hasRainfallGuidance": true,
+        "formAutoFillWorked": true,
+        "recommendationRendered": true
+      }
+    },
+    "market": {
+      "id": "UAT-MKT-01",
+      "status": "PASS",
+      "details": {
+        "renderedFilters": true,
+        "hasAdvisoryDisclaimer": true
+      }
+    },
+    "diseaseDetection": {
+      "id": "UAT-DIS-01",
+      "status": "PASS",
+      "details": {
+        "invalidFileRejected": true,
+        "resultHeading": "Prediction is uncertain",
+        "isUncertain": true
+      }
+    },
+    "logoutAndProtection": {
+      "id": "UAT-SEC-01",
+      "status": "PASS",
+      "details": {
+        "tokenCleared": true,
+        "protectedRouteWorking": true
+      }
+    }
+  },
+  "screenshots": [
+    "01_404_not_found.png",
+    "02_login_page.png",
+    "03_register_validation.png",
+    "04_invalid_login.png",
+    "05_authenticated_dashboard.png",
+    "06_farm_created.png",
+    "07_farm_edited.png",
+    "08_soil_page.png",
+    "09_recommendation_flow.png",
+    "10_market_page.png",
+    "11_disease_invalid_file.png",
+    "12_disease_uncertain_result.png",
+    "13_crop_history.png",
+    "14_mobile_nav_open.png",
+    "15_logout_protected_route.png"
+  ],
+  "defects": [],
+  "cleanup": {
+    "testFarmsDeleted": 1,
+    "testUserDeleted": 4,
+    "preExistingUsersPreserved": 41,
+    "preExistingFarmsPreserved": 17,
+    "status": "PASS"
+  }
+}
