@@ -176,6 +176,52 @@ try {
         assert(res.body.errors[0].message.includes('Invalid _id: invalid-id-123'));
     });
 
+    // -----------------------------------------------------------------------
+    // 4. Weather Service & Controller Diagnostic Logging & Response Sanitization
+    // -----------------------------------------------------------------------
+    console.log('\n4. Weather Diagnostic Logging & Error Sanitization');
+    const originalWeatherBaseUrl = process.env.WEATHER_API_BASE_URL;
+    try {
+        process.env.WEATHER_API_BASE_URL = 'http://127.0.0.1:1';
+        const { getWeather } = await import('./src/controllers/weather.controller.js');
+
+        const loggedErrors = [];
+        const originalConsoleError = console.error;
+        console.error = (...args) => {
+            loggedErrors.push(args.join(' '));
+        };
+
+        const res = createMockRes();
+        await getWeather({ query: { latitude: '22.7196', longitude: '75.8577' } }, res, () => {});
+
+        console.error = originalConsoleError;
+
+        test('Weather controller returns HTTP 503 on upstream failure', () => {
+            assert.strictEqual(res.statusCode, 503);
+            assert.strictEqual(res.body.success, false);
+            assert.strictEqual(res.body.message, 'Weather service is currently unavailable.');
+        });
+
+        test('Weather controller strictly sanitizes 503 response without leaking internal errors or host', () => {
+            const bodyStr = JSON.stringify(res.body);
+            assert(!bodyStr.includes('127.0.0.1'), 'Never leaks internal host/port');
+            assert(!bodyStr.includes('ECONNREFUSED'), 'Never leaks system error code');
+            assert(!bodyStr.includes('fetch failed'), 'Never leaks internal fetch stack message');
+            assert.strictEqual(Object.keys(res.body).length, 2, 'Only returns success and message keys');
+        });
+
+        test('Weather diagnostics are logged to server console via console.error', () => {
+            assert(loggedErrors.some(msg => msg.includes('[WeatherService]') && msg.includes('Weather fetch failed')), 'Logs WeatherService fetch failure');
+            assert(loggedErrors.some(msg => msg.includes('[WeatherController]') && msg.includes('Weather retrieval failed')), 'Logs WeatherController error');
+        });
+    } finally {
+        if (originalWeatherBaseUrl !== undefined) {
+            process.env.WEATHER_API_BASE_URL = originalWeatherBaseUrl;
+        } else {
+            delete process.env.WEATHER_API_BASE_URL;
+        }
+    }
+
 } finally {
     // Restore original NODE_ENV
     process.env.NODE_ENV = originalNodeEnv;

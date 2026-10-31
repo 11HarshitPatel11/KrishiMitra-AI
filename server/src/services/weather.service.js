@@ -31,6 +31,7 @@ export const getCurrentWeather = async (latitude, longitude) => {
 
         // 4. Check HTTP response status
         if (!response.ok) {
+            console.error(`[WeatherService] Upstream Open-Meteo returned HTTP ${response.status}`);
             throw new Error(`Weather service is currently unavailable. Status: ${response.status}`);
         }
 
@@ -39,6 +40,7 @@ export const getCurrentWeather = async (latitude, longitude) => {
 
         // 6. Extract only required fields
         if (!data.current) {
+            console.error('[WeatherService] Malformed weather payload: missing .current field');
             throw new Error('Malformed weather data structure received');
         }
 
@@ -50,6 +52,10 @@ export const getCurrentWeather = async (latitude, longitude) => {
             rainfall_status: 'not_aligned'
         };
     } catch (error) {
+        // Safe server-side diagnostic logging (network, timeout, status)
+        const cause = error.cause ? ` (Cause: ${error.cause.code || error.cause.message || error.cause})` : '';
+        console.error(`[WeatherService] Weather fetch failed: ${error.name || 'Error'} - ${error.message}${cause}`);
+
         // Normalize errors to prevent exposing stack traces / raw underlying failures
         if (error.message.includes('unavailable') || error.message.includes('Invalid')) {
             throw error;

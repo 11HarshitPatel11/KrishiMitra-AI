@@ -43,6 +43,7 @@ export const getWeather = async (req, res, next) => {
 
         // Pass to standard error handler or return 503
         if (error.message.includes('unavailable')) {
+            console.error(`[WeatherController] Weather retrieval failed: ${error.name || 'Error'} - ${error.message}`);
             return res.status(503).json({
                 success: false,
                 message: 'Weather service is currently unavailable.'
