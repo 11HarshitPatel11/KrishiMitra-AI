@@ -11,13 +11,23 @@ export const getCurrentWeather = async (latitude, longitude) => {
     }
 
     // 2. Build Open-Meteo Request
-    const baseUrl = process.env.WEATHER_API_BASE_URL || 'https://api.open-meteo.com/v1/forecast';
+    let baseUrl = (process.env.WEATHER_API_BASE_URL || 'https://api.open-meteo.com/v1/forecast').trim();
+    baseUrl = baseUrl.replace(/^["']|["']$/g, '').replace(/\/+$/, '');
+    if (!baseUrl || baseUrl === 'https://api.open-meteo.com') {
+        baseUrl = 'https://api.open-meteo.com/v1/forecast';
+    }
+
     // Using current=temperature_2m,relative_humidity_2m,precipitation
     const url = `${baseUrl}?latitude=${lat}&longitude=${lon}&current=temperature_2m,relative_humidity_2m,precipitation`;
 
     try {
-        // 3. Call Open-Meteo
-        const response = await fetch(url);
+        // 3. Call Open-Meteo with descriptive User-Agent and 8-second timeout
+        const response = await fetch(url, {
+            headers: {
+                'User-Agent': 'KrishiMitra-AI/1.0 (https://github.com/11HarshitPatel11/KrishiMitra-AI)'
+            },
+            signal: AbortSignal.timeout(8000)
+        });
 
         // 4. Check HTTP response status
         if (!response.ok) {
