@@ -481,15 +481,39 @@ async function runMarketServiceTests() {
     const originalFetch = global.fetch;
 
     try {
-        // Missing Base URL
-        delete process.env.MARKET_API_BASE_URL;
-        let missingBaseErr = null;
+        // Invalid Base URL
+        process.env.MARKET_API_BASE_URL = "not-a-valid-url";
+        process.env.MARKET_API_KEY = "test_valid_key";
+        let invalidBaseErr = null;
         try {
             await MarketService.getMarketPrices({});
         } catch (e) {
-            missingBaseErr = e;
+            invalidBaseErr = e;
         }
-        assert(missingBaseErr && missingBaseErr.code === 'CONFIG_MISSING', "Throws CONFIG_MISSING when MARKET_API_BASE_URL is absent");
+        assert(invalidBaseErr && invalidBaseErr.code === 'CONFIG_MISSING', "Throws CONFIG_MISSING when MARKET_API_BASE_URL is invalid");
+
+        // Fallback to official default when Base URL is absent
+        delete process.env.MARKET_API_BASE_URL;
+        let capturedUrl = null;
+        let capturedOptions = null;
+        global.fetch = async (url, options) => {
+            capturedUrl = typeof url === 'string' ? url : url.toString();
+            capturedOptions = options;
+            return {
+                ok: true,
+                status: 200,
+                json: async () => ({ status: "ok", records: [] })
+            };
+        };
+        await MarketService.getMarketPrices({});
+        assert(capturedUrl && capturedUrl.startsWith("https://api.data.gov.in/resource/9ef84268-d588-465a-a308-a864a43d0070"), "Falls back to official Data.gov.in Mandi URL when MARKET_API_BASE_URL is absent");
+        assert(capturedOptions && capturedOptions.headers['User-Agent'].includes('KrishiMitra-AI'), "Requests include descriptive User-Agent header");
+        assert(capturedOptions && capturedOptions.headers['Accept'] === 'application/json', "Requests include Accept: application/json header");
+
+        // Base URL sanitization (strips surrounding quotes, whitespace, and trailing slashes)
+        process.env.MARKET_API_BASE_URL = ' "https://api.data.gov.in/resource/9ef84268-d588-465a-a308-a864a43d0070///" ';
+        await MarketService.getMarketPrices({});
+        assert(capturedUrl && capturedUrl.startsWith("https://api.data.gov.in/resource/9ef84268-d588-465a-a308-a864a43d0070?"), "Sanitizes quotes, whitespace, and trailing slashes in MARKET_API_BASE_URL");
 
         // Missing API Key
         process.env.MARKET_API_BASE_URL = "https://api.data.gov.in/resource/9ef84268-d588-465a-a308-a864a43d0070";
@@ -514,6 +538,20 @@ async function runMarketServiceTests() {
 
         // Set valid test key and mock external fetch for network/API scenarios
         process.env.MARKET_API_KEY = "test_valid_key";
+
+        // Underlying network error with error.cause
+        global.fetch = async () => {
+            const netErr = new TypeError("fetch failed");
+            netErr.cause = { name: "Error", message: "getaddrinfo ENOTFOUND api.data.gov.in", code: "ENOTFOUND" };
+            throw netErr;
+        };
+        let networkErr = null;
+        try {
+            await MarketService.getMarketPrices({});
+        } catch (e) {
+            networkErr = e;
+        }
+        assert(networkErr && networkErr.code === 'SERVICE_UNAVAILABLE', "Throws SERVICE_UNAVAILABLE on underlying network/cause error");
 
         // External 500 error
         global.fetch = async () => ({

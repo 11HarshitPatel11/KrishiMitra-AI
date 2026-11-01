@@ -208,16 +208,31 @@ const NORMALIZED_COMMODITY_MAP = {
     'robusta': 'coffee'
 };
 
+const DEFAULT_MARKET_API_BASE_URL = 'https://api.data.gov.in/resource/9ef84268-d588-465a-a308-a864a43d0070';
+
 export class MarketService {
     static async getMarketPrices({ commodity, state, district, limit = 10 }) {
-        const baseUrl = process.env.MARKET_API_BASE_URL;
-        const apiKey = process.env.MARKET_API_KEY;
+        let rawBaseUrl = process.env.MARKET_API_BASE_URL;
+        let baseUrl = (typeof rawBaseUrl === 'string' && rawBaseUrl.trim())
+            ? rawBaseUrl.trim()
+            : DEFAULT_MARKET_API_BASE_URL;
 
+        baseUrl = baseUrl.replace(/^["']|["']$/g, '').trim().replace(/\/+$/, '');
         if (!baseUrl) {
+            baseUrl = DEFAULT_MARKET_API_BASE_URL;
+        }
+
+        let url;
+        try {
+            url = new URL(baseUrl);
+        } catch (_) {
             const err = new Error("Market API is not configured.");
             err.code = 'CONFIG_MISSING';
             throw err;
         }
+
+        const requestHost = url.hostname;
+        const apiKey = process.env.MARKET_API_KEY;
 
         if (!apiKey || !apiKey.trim() || apiKey.includes('YOUR_API_KEY')) {
             const err = new Error("Market API Key is missing.");
@@ -226,7 +241,6 @@ export class MarketService {
         }
 
         try {
-            const url = new URL(baseUrl);
             url.searchParams.append('api-key', apiKey);
             url.searchParams.append('format', 'json');
 
@@ -246,19 +260,29 @@ export class MarketService {
             }
 
             const controller = new AbortController();
-            const timeoutId = setTimeout(() => controller.abort(), 6000);
+            const timeoutId = setTimeout(() => controller.abort(), 10000);
 
             let response;
             try {
-                response = await fetch(url.toString(), { signal: controller.signal });
+                response = await fetch(url.toString(), {
+                    headers: {
+                        'User-Agent': 'KrishiMitra-AI/1.0 (https://github.com/11HarshitPatel11/KrishiMitra-AI)',
+                        'Accept': 'application/json'
+                    },
+                    signal: controller.signal
+                });
             } finally {
                 clearTimeout(timeoutId);
             }
 
             if (!response.ok) {
-                const err = new Error(`Data.gov.in responded with status ${response.status}`);
-                err.code = 'SERVICE_UNAVAILABLE';
-                throw err;
+                let upstreamReason = '';
+                try {
+                    const errJson = await response.json();
+                    upstreamReason = errJson.error || errJson.reason || errJson.message || JSON.stringify(errJson);
+                } catch (_) {}
+                console.error(`[MarketService] Upstream host "${requestHost}" returned HTTP ${response.status}${upstreamReason ? `: "${upstreamReason}"` : ''}`);
+                throw new Error(`Data.gov.in responded with status ${response.status}`);
             }
 
             const data = await response.json();
@@ -314,7 +338,12 @@ export class MarketService {
             if (error.code === 'CONFIG_MISSING') {
                 throw error;
             }
-            console.error("[MarketService] Error fetching external market data:", error.message);
+            const causeName = error.cause?.name ? `${error.cause.name}: ` : '';
+            const causeMsg = error.cause?.message || (typeof error.cause === 'string' ? error.cause : '');
+            const causeCode = error.cause?.code ? ` [${error.cause.code}]` : '';
+            const causeDetails = (causeName || causeMsg || causeCode) ? ` (Cause: ${causeName}${causeMsg}${causeCode})` : '';
+
+            console.error(`[MarketService] Market fetch failed for host "${requestHost}": ${error.name || 'Error'} - ${error.message}${causeDetails}`);
             const err = new Error("Market Service Unavailable");
             err.code = 'SERVICE_UNAVAILABLE';
             throw err;
