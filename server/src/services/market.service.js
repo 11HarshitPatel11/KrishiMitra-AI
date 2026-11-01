@@ -233,15 +233,26 @@ export class MarketService {
 
         const requestHost = url.hostname;
         const apiKey = process.env.MARKET_API_KEY;
+        const rawProxySecret = process.env.MARKET_PROXY_SECRET;
+        let proxySecret = (typeof rawProxySecret === 'string' && rawProxySecret.trim())
+            ? rawProxySecret.replace(/^["']|["']$/g, '').trim()
+            : null;
+        if (!proxySecret) {
+            proxySecret = null;
+        }
 
-        if (!apiKey || !apiKey.trim() || apiKey.includes('YOUR_API_KEY')) {
+        const hasValidApiKey = apiKey && typeof apiKey === 'string' && apiKey.trim() && !apiKey.includes('YOUR_API_KEY');
+
+        if (!hasValidApiKey && !proxySecret) {
             const err = new Error("Market API Key is missing.");
             err.code = 'CONFIG_MISSING';
             throw err;
         }
 
         try {
-            url.searchParams.append('api-key', apiKey);
+            if (hasValidApiKey) {
+                url.searchParams.append('api-key', apiKey.trim());
+            }
             url.searchParams.append('format', 'json');
 
             // We request more from the API to allow post-filtering and deep historical analysis natively
@@ -262,13 +273,22 @@ export class MarketService {
             const controller = new AbortController();
             const timeoutId = setTimeout(() => controller.abort(), 10000);
 
+            const headers = {
+                'User-Agent': 'KrishiMitra-AI/1.0 (https://github.com/11HarshitPatel11/KrishiMitra-AI)',
+                'Accept': 'application/json'
+            };
+            if (proxySecret) {
+                headers['x-proxy-secret'] = proxySecret;
+            }
+
+            const hasProxySecret = Boolean(proxySecret);
+            const isHeaderAttached = Boolean(headers['x-proxy-secret']);
+            console.log(`[MarketService] Outbound request to "${requestHost}": proxySecretConfigured=${hasProxySecret}, headerAttached=${isHeaderAttached}`);
+
             let response;
             try {
                 response = await fetch(url.toString(), {
-                    headers: {
-                        'User-Agent': 'KrishiMitra-AI/1.0 (https://github.com/11HarshitPatel11/KrishiMitra-AI)',
-                        'Accept': 'application/json'
-                    },
+                    headers,
                     signal: controller.signal
                 });
             } finally {

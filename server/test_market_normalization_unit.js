@@ -478,6 +478,7 @@ assert(noDateRec === null, "normalizeRecord rejects missing arrival_date");
 async function runMarketServiceTests() {
     const originalApiKey = process.env.MARKET_API_KEY;
     const originalBaseUrl = process.env.MARKET_API_BASE_URL;
+    const originalProxySecret = process.env.MARKET_PROXY_SECRET;
     const originalFetch = global.fetch;
 
     try {
@@ -515,7 +516,8 @@ async function runMarketServiceTests() {
         await MarketService.getMarketPrices({});
         assert(capturedUrl && capturedUrl.startsWith("https://api.data.gov.in/resource/9ef84268-d588-465a-a308-a864a43d0070?"), "Sanitizes quotes, whitespace, and trailing slashes in MARKET_API_BASE_URL");
 
-        // Missing API Key
+        // Missing API Key (when no proxy secret is configured)
+        delete process.env.MARKET_PROXY_SECRET;
         process.env.MARKET_API_BASE_URL = "https://api.data.gov.in/resource/9ef84268-d588-465a-a308-a864a43d0070";
         delete process.env.MARKET_API_KEY;
         let missingKeyErr = null;
@@ -524,9 +526,9 @@ async function runMarketServiceTests() {
         } catch (e) {
             missingKeyErr = e;
         }
-        assert(missingKeyErr && missingKeyErr.code === 'CONFIG_MISSING', "Throws CONFIG_MISSING when MARKET_API_KEY is absent");
+        assert(missingKeyErr && missingKeyErr.code === 'CONFIG_MISSING', "Throws CONFIG_MISSING when MARKET_API_KEY is absent and no proxy secret");
 
-        // Placeholder API Key
+        // Placeholder API Key (when no proxy secret is configured)
         process.env.MARKET_API_KEY = "YOUR_API_KEY_HERE";
         let placeholderKeyErr = null;
         try {
@@ -535,6 +537,42 @@ async function runMarketServiceTests() {
             placeholderKeyErr = e;
         }
         assert(placeholderKeyErr && placeholderKeyErr.code === 'CONFIG_MISSING', "Throws CONFIG_MISSING when MARKET_API_KEY is placeholder");
+
+        // Proxy secret configuration test (attaches x-proxy-secret header)
+        process.env.MARKET_PROXY_SECRET = "test_proxy_secret_token";
+        process.env.MARKET_API_KEY = "test_valid_key";
+        await MarketService.getMarketPrices({});
+        assert(capturedOptions && capturedOptions.headers['x-proxy-secret'] === 'test_proxy_secret_token', "Attaches x-proxy-secret header when MARKET_PROXY_SECRET is configured");
+
+        // Proxy secret sanitizes surrounding quotes
+        process.env.MARKET_PROXY_SECRET = '"quoted_secret_value"';
+        await MarketService.getMarketPrices({});
+        assert(capturedOptions && capturedOptions.headers['x-proxy-secret'] === 'quoted_secret_value', "Strips double quotes from MARKET_PROXY_SECRET");
+
+        process.env.MARKET_PROXY_SECRET = "'single_quoted_secret'";
+        await MarketService.getMarketPrices({});
+        assert(capturedOptions && capturedOptions.headers['x-proxy-secret'] === 'single_quoted_secret', "Strips single quotes from MARKET_PROXY_SECRET");
+
+        // Proxy secret allows operation when MARKET_API_KEY is absent
+        process.env.MARKET_PROXY_SECRET = "test_proxy_secret_token";
+        delete process.env.MARKET_API_KEY;
+        await MarketService.getMarketPrices({});
+        assert(capturedOptions && capturedOptions.headers['x-proxy-secret'] === 'test_proxy_secret_token', "Allows operation without MARKET_API_KEY when MARKET_PROXY_SECRET is present");
+        assert(!capturedUrl.includes('api-key='), "Does not append api-key query parameter when MARKET_API_KEY is absent");
+
+        // Proxy secret is NOT attached when MARKET_PROXY_SECRET is absent
+        delete process.env.MARKET_PROXY_SECRET;
+        process.env.MARKET_API_KEY = "test_valid_key";
+        await MarketService.getMarketPrices({});
+        assert(capturedOptions && !('x-proxy-secret' in capturedOptions.headers), "Does not attach x-proxy-secret header when MARKET_PROXY_SECRET is absent");
+        assert(capturedUrl.includes('api-key=test_valid_key'), "Appends api-key query parameter when MARKET_API_KEY is present");
+
+        // Lambda Function URL endpoint configuration test
+        process.env.MARKET_API_BASE_URL = "https://yorukwjhoxz7bduu5odagm4tr40ytgzj.lambda-url.ap-south-1.on.aws/";
+        process.env.MARKET_PROXY_SECRET = "production_proxy_secret";
+        await MarketService.getMarketPrices({});
+        assert(capturedUrl && capturedUrl.startsWith("https://yorukwjhoxz7bduu5odagm4tr40ytgzj.lambda-url.ap-south-1.on.aws/?"), "Correctly constructs request for AWS Lambda Function URL proxy");
+        assert(capturedOptions.headers['x-proxy-secret'] === 'production_proxy_secret', "Transmits x-proxy-secret to AWS Lambda Function URL");
 
         // Set valid test key and mock external fetch for network/API scenarios
         process.env.MARKET_API_KEY = "test_valid_key";
@@ -612,6 +650,7 @@ async function runMarketServiceTests() {
     } finally {
         process.env.MARKET_API_KEY = originalApiKey;
         process.env.MARKET_API_BASE_URL = originalBaseUrl;
+        process.env.MARKET_PROXY_SECRET = originalProxySecret;
         global.fetch = originalFetch;
     }
 }
