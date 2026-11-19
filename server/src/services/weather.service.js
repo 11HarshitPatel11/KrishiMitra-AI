@@ -1,3 +1,9 @@
+import dns from 'node:dns';
+// Force IPv4-first resolution to prevent IPv6 NAT64 connection timeouts on cloud hosts like Render
+try {
+    dns.setDefaultResultOrder('ipv4first');
+} catch (_) {}
+
 const FRESH_TTL_MS = 20 * 60 * 1000;      // 20 minutes fresh TTL
 const MAX_STALE_TTL_MS = 60 * 60 * 1000;   // 60 minutes max stale threshold
 const DEFAULT_COOLDOWN_SEC = 60;          // 60 seconds default 429 cooldown
@@ -47,9 +53,10 @@ const executeUpstreamFetch = async (lat, lon, cacheKey, cached) => {
     try {
         const response = await fetch(url, {
             headers: {
-                'User-Agent': 'KrishiMitra-AI/1.0 (https://github.com/11HarshitPatel11/KrishiMitra-AI)'
+                'User-Agent': 'KrishiMitra-AI/1.0 (https://github.com/11HarshitPatel11/KrishiMitra-AI)',
+                'Accept': 'application/json'
             },
-            signal: AbortSignal.timeout(8000)
+            signal: AbortSignal.timeout(10000)
         });
 
         // Handle upstream non-200 responses
@@ -82,14 +89,22 @@ const executeUpstreamFetch = async (lat, lon, cacheKey, cached) => {
 
         const data = await response.json();
 
-        if (!data.current) {
-            console.error('[WeatherService] Malformed weather payload: missing .current field');
+        if (!data.current || data.current.temperature_2m === undefined || data.current.relative_humidity_2m === undefined) {
+            console.error('[WeatherService] Malformed weather payload: missing required current temperature or humidity fields');
+            throw new Error('Malformed weather data structure received');
+        }
+
+        const temp = Number(data.current.temperature_2m);
+        const humidity = Number(data.current.relative_humidity_2m);
+
+        if (isNaN(temp) || isNaN(humidity)) {
+            console.error('[WeatherService] Malformed weather values: temperature or humidity is NaN');
             throw new Error('Malformed weather data structure received');
         }
 
         const normalizedData = {
-            temperature: data.current.temperature_2m,
-            humidity: data.current.relative_humidity_2m,
+            temperature: temp,
+            humidity: humidity,
             rainfall: null,
             rainfall_status: 'not_aligned'
         };

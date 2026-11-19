@@ -148,7 +148,15 @@ export const RecommendationForm = () => {
             },
             (err) => {
                 setIsLocating(false);
-                setWeatherError('Location access was denied or timed out. Please select your State from the dropdown or enter coordinates manually.');
+                if (err.code === 1) {
+                    setWeatherError(t('farm.locationPermissionDenied', 'GPS location permission was denied. Please allow location access in your browser or select your State from the dropdown.'));
+                } else if (err.code === 2) {
+                    setWeatherError(t('farm.positionUnavailable', 'GPS location is currently unavailable. Please check your device location settings or enter coordinates manually.'));
+                } else if (err.code === 3) {
+                    setWeatherError(t('farm.locationTimeout', 'GPS location request timed out. Please try again or enter coordinates manually.'));
+                } else {
+                    setWeatherError('Location access was denied or timed out. Please select your State from the dropdown or enter coordinates manually.');
+                }
             },
             { timeout: 8000, enableHighAccuracy: true }
         );
@@ -201,7 +209,8 @@ export const RecommendationForm = () => {
         setFetchedWeather({
             temperature: t,
             humidity: h,
-            rainfall: null
+            rainfall: null,
+            source: 'manual'
         });
         setWeatherError(null);
         setIsManualWeather(false);
@@ -709,12 +718,23 @@ export const RecommendationForm = () => {
                         <div className="mt-4 pt-3 border-t border-stone-200">
                             <div className="flex flex-col sm:flex-row sm:items-center justify-between text-xs text-stone-600 mb-2.5 gap-1">
                                 <span className="font-semibold text-emerald-800 flex items-center gap-1">
-                                    <span>✓</span> {t('recommendation.weatherSuccessRetrieved', 'Weather data successfully retrieved and applied')}
+                                    <span>✓</span> {fetchedWeather.source === 'manual'
+                                        ? t('recommendation.weatherManualApplied', 'Weather data manually entered and applied')
+                                        : t('recommendation.weatherSuccessRetrieved', 'Weather data successfully retrieved and applied')}
                                 </span>
-                                <span className="text-[11px] text-stone-500 font-mono">
-                                    📍 {formData.latitude ? `${formData.latitude}°N, ${formData.longitude}°E` : 'Manual Input'}
-                                    {formData.state ? ` (${formData.state})` : ''}
-                                </span>
+                                <div className="flex items-center gap-2">
+                                    <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
+                                        fetchedWeather.source === 'manual'
+                                            ? 'bg-amber-100 text-amber-800 border border-amber-300'
+                                            : 'bg-emerald-100 text-emerald-800 border border-emerald-300'
+                                    }`}>
+                                        {fetchedWeather.source === 'manual' ? 'Manual Input' : 'Live Weather API'}
+                                    </span>
+                                    <span className="text-[11px] text-stone-500 font-mono">
+                                        📍 {formData.latitude ? `${formData.latitude}°N, ${formData.longitude}°E` : 'Manual Input'}
+                                        {formData.state ? ` (${formData.state})` : ''}
+                                    </span>
+                                </div>
                             </div>
                             <div className="grid grid-cols-2 gap-3 text-center">
                                 <div className="bg-white p-3 rounded-lg border border-stone-200 shadow-sm">

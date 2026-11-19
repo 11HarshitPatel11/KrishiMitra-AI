@@ -4,6 +4,12 @@ if (process.env.DOTENV_CONFIG_PATH) {
     dotenv.config({ path: process.env.DOTENV_CONFIG_PATH });
 }
 
+import dns from 'node:dns';
+// Force IPv4-first resolution to prevent IPv6 NAT64 connection timeouts on cloud hosts like Render
+try {
+    dns.setDefaultResultOrder('ipv4first');
+} catch (_) {}
+
 import { validateStartupEnv } from './config/env.js';
 
 // Fail-fast environment validation before connecting to database or starting server
